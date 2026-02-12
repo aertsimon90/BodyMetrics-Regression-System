@@ -28,6 +28,7 @@ The system normalizes all inputs to a range between  and  before processing. The
 * **Advanced Learning:** Utilizes momentum (`momentumexc`) and natural derivatives to prevent the model from getting stuck in local minima during training.
 
 <img src="brain.png" width="800" height="400">
+(from ZevihaNut/3.0 images)
 
 ---
 
