@@ -13,9 +13,10 @@ The core of this project is powered by the **ZevihaNut/3.0** neural network arch
 * **Hybrid Interface:** * **GUI (Graphical User Interface):** Built with Tkinter for interactive sliding scales and real-time visualization.
 * **CLI (Command Line Interface):** Robust terminal support for automated training, data entry, and quick predictions.
 
-<img src="gui.png" width="800" height="400">
+<img src="gui.png" width="600" height="400">
 
 * **Visual Regression Analysis:** Integrated Matplotlib "Review" feature to visualize how well the AI line fits the training data points.
+<img src="gui2.png" width="600" height="400">
 
 ---
 
