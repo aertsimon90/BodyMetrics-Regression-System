@@ -38,7 +38,7 @@ The system normalizes all inputs to a range between  and  before processing. The
 1. Ensure you have the `zevihanthosa` library installed in your Python environment.
 2. Install the necessary dependencies:
 ```bash
-pip install matplotlib numpy
+pip install matplotlib tkinter
 
 ```
 
