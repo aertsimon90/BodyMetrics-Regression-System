@@ -2,7 +2,7 @@
 
 **BodyMetrics Regression System** is an advanced AI-driven application designed to model and predict the complex relationships between human age, height, and weight. Unlike standard linear models, this system uses a multi-directional neural network to estimate missing physical metrics based on available data.
 
-The core of this project is powered by the **ZevihaNut/3.0** neural network architecture, part of the [aertsimon90/Zevihanthosa](https://www.google.com/search?q=https://github.com/aertsimon90/Zevihanthosa) framework.
+The core of this project is powered by the **ZevihaNut/3.0** neural network architecture, part of the [aertsimon90/Zevihanthosa](https://github.com/aertsimon90/Zevihanthosa) framework.
 
 ---
 
