@@ -1,4 +1,4 @@
-# # BodyMetrics Regression System
+# BodyMetrics Regression System
 
 **BodyMetrics Regression System** is an advanced AI-driven application designed to model and predict the complex relationships between human age, height, and weight, now featuring **gender-specific biometric modeling**. Unlike standard linear models, this system uses a multi-directional neural network to estimate missing physical metrics based on available data.
 
