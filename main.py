@@ -1,4 +1,4 @@
-# BodyMetrics Regression System
+# BodyMetrics Regression/Autoencoder System
 
 import zevihanthosa
 import random
