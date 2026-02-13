@@ -32,6 +32,8 @@ The system normalizes all inputs to a range between **0.0** and **1.0** before p
 <img src="brain.png" width="800" height="400">
 (from ZevihaNut/3.0 images)
 
+<img src="autoencoder.png" width="800" height="400">
+
 ---
 
 ## 🖥️ Usage Guide
