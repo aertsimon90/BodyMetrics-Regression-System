@@ -1,4 +1,4 @@
-# BodyMetrics Regression/Autoencoder System
+# BodyMetrics Regression System
 
 import zevihanthosa
 import random
@@ -33,7 +33,9 @@ class System:
     def train(self, epoch=40):
         for i in range(epoch):
             print(f"Training... {(i/epoch)*100:.0f}%")
-            for data in self.data:
+            shuffleddata = self.data.copy()
+            random.shuffle(shuffleddata)
+            for data in shuffleddata:
                 age, height, kg, gender = data
                 for useage in range(2):
                     for useheight in range(2):
@@ -167,7 +169,7 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("BodyMetrics Regression System | Human Autoencoder")
-        self.geometry("900x650")
+        self.geometry("900x500")
         self.configure(bg="#f0f2f5")
         style = ttk.Style()
         style.theme_use('clam')
