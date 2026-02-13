@@ -11,13 +11,13 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
 
 class System:
-    def __init__(self, learning=0.05, truely=1, momentumexc=0.9, maxage=100, maxheight=200, maxkg=150):
-        self.malemodel = zevihanthosa.Brain(lobes=[[3,12],[12,3]], learning=learning, truely=truely, momentumexc=momentumexc)
-        self.femalemodel = zevihanthosa.Brain(lobes=[[3,12],[12,3]], learning=learning, truely=truely, momentumexc=momentumexc)
-        self.gendermodel = zevihanthosa.Brain(lobes=[[3,12],[12,4,1]], learning=learning, truely=truely, momentumexc=momentumexc)
-        self.malemodel.lobesset = [[1.8, 1.6], [0.8, 0.6]]
-        self.femalemodel.lobesset = [[1.8, 1.6], [0.8, 0.6]]
-        self.gendermodel.lobesset = [[1.8, 1.6], [0.8, 0.6]]
+    def __init__(self, lobes=[[3,12],[12,6,3]], lobesset=[[1.8, 1.6], [0.8, 0.6]], genderlobes=[[3,12],[12,4,1]], genderlobesset=[[1.8, 1.6], [0.8, 0.6]], learning=0.05, truely=1, momentumexc=0.9, maxage=100, maxheight=200, maxkg=150):
+        self.malemodel = zevihanthosa.Brain(lobes=lobes, learning=learning, truely=truely, momentumexc=momentumexc)
+        self.femalemodel = zevihanthosa.Brain(lobes=lobes, learning=learning, truely=truely, momentumexc=momentumexc)
+        self.gendermodel = zevihanthosa.Brain(lobes=genderlobes, learning=learning, truely=truely, momentumexc=momentumexc)
+        self.malemodel.lobesset = lobesset
+        self.femalemodel.lobesset = lobesset
+        self.gendermodel.lobesset = genderlobesset
         self.data = []
         self.maxage = maxage
         self.maxheight = maxheight
@@ -103,9 +103,9 @@ def load(autocreate=True):
 			aimodel.train()
 			save()
 
-def createnewmodel(learning=0.05, truely=1, momentumexc=0.9, maxage=100, maxheight=200, maxkg=150, pretrain=True, pretrainmaxage=101, pretrainepoch=40):
+def createnewmodel(lobes=[[3,12],[12,6,3]], lobesset=[[1.8, 1.6], [0.8, 0.6]], genderlobes=[[3,12],[12,4,1]], genderlobesset=[[1.8, 1.6], [0.8, 0.6]], learning=0.05, truely=1, momentumexc=0.9, maxage=100, maxheight=200, maxkg=150, pretrain=True, pretrainmaxage=101, pretrainepoch=40):
 	global aimodel
-	aimodel = System(learning=learning, truely=truely, momentumexc=momentumexc, maxage=maxage, maxheight=maxheight, maxkg=maxkg)
+	aimodel = System(lobes=lobes, lobesset=lobesset, genderlobes=genderlobes, genderlobesset=genderlobesset, learning=learning, truely=truely, momentumexc=momentumexc, maxage=maxage, maxheight=maxheight, maxkg=maxkg)
 	if pretrain:
 		aimodel.import_example_data(pretrainmaxage)
 		aimodel.train(epoch=pretrainepoch)
@@ -237,7 +237,7 @@ class App(tk.Tk):
         def submit():
             try:
                 aimodel.add_data(int(entries["age"].get()), float(entries["height"].get()), float(entries["weight"].get()), g_var.get())
-                save(); win.destroy(); messagebox.showinfo("Done", "Data saved.")
+                save(); messagebox.showinfo("Done", "Data saved.")
             except: messagebox.showerror("Error", "Invalid Input")
         ttk.Button(f, text="Save Data", command=submit).pack(pady=20, fill="x")
     def train_ui(self):
@@ -305,12 +305,70 @@ class App(tk.Tk):
     def new_model_window(self):
         win = tk.Toplevel(self)
         win.title("Create New AI Model")
-        win.geometry("500x430")
-        win.resizable(False, False)
+        win.geometry("900x750")
+        win.resizable(True, True)
         win.grab_set()
         f = ttk.Frame(win, padding="20 20 20 20")
         f.pack(fill="both", expand=True)
-        ttk.Label(f, text="Model Configuration", font=("Segoe UI", 14, "bold")).grid(row=0, column=0, columnspan=3, pady=(0, 20))
+        ttk.Label(f, text="Brain Designer", font=("Segoe UI", 16, "bold")).pack(pady=(0, 20))
+        tab_control = ttk.Notebook(f)
+        body_tab = ttk.Frame(tab_control)
+        gender_tab = ttk.Frame(tab_control)
+        tab_control.add(body_tab, text='Body Models (Male/Female)')
+        tab_control.add(gender_tab, text='Gender Model')
+        tab_control.pack(fill="both", expand=True, pady=10)
+        body_lobes_default = [[3, 12], [12, 6, 3]]
+        body_lobesset_default = [[1.8, 1.6], [0.8, 0.6]]
+        gender_lobes_default = [[3, 12], [12, 4, 1]]
+        gender_lobesset_default = [[1.8, 1.6], [0.8, 0.6]]
+        body_lobe_data = []
+        gender_lobe_data = []
+        def add_lobe(parent, lobe_data, initial_layers=[], initial_rates=[1.8, 1.6]):
+            lobe_index = len(lobe_data)
+            lobe_frame = ttk.Frame(parent)
+            lobe_frame.pack(fill="x", pady=5)
+            ttk.Label(lobe_frame, text=f"Lobe {lobe_index + 1}").pack(side="left", padx=5)
+            trainrate_entry = ttk.Entry(lobe_frame, width=5)
+            trainrate_entry.insert(0, str(initial_rates[0]))
+            trainrate_entry.pack(side="left", padx=5)
+            ttk.Label(lobe_frame, text="Train Rate").pack(side="left", padx=5)
+            learnrate_entry = ttk.Entry(lobe_frame, width=5)
+            learnrate_entry.insert(0, str(initial_rates[1]))
+            learnrate_entry.pack(side="left", padx=5)
+            ttk.Label(lobe_frame, text="Learn Rate").pack(side="left", padx=5)
+            layer_entries = []
+            def add_layer(initial=10):
+                layer_entry = ttk.Entry(lobe_frame, width=5)
+                layer_entry.insert(0, str(initial))
+                layer_entry.pack(side="left", padx=5)
+                def remove_this_layer():
+                    layer_entry.destroy()
+                    remove_btn.destroy()
+                    if layer_entry in layer_entries:
+                        layer_entries.remove(layer_entry)
+                remove_btn = ttk.Button(lobe_frame, text="X", width=2, command=remove_this_layer)
+                remove_btn.pack(side="left")
+                layer_entries.append(layer_entry)
+            add_layer_btn = ttk.Button(lobe_frame, text="+ Layer", command=lambda: add_layer(10))
+            add_layer_btn.pack(side="left", padx=10)
+            def remove_lobe():
+                lobe_frame.destroy()
+                if (trainrate_entry, learnrate_entry, layer_entries) in lobe_data:
+                    lobe_data.remove((trainrate_entry, learnrate_entry, layer_entries))
+            remove_lobe_btn = ttk.Button(lobe_frame, text="Remove Lobe", command=remove_lobe)
+            remove_lobe_btn.pack(side="left", padx=5)
+            for layer_size in initial_layers:
+                add_layer(layer_size)
+            lobe_data.append((trainrate_entry, learnrate_entry, layer_entries))
+        add_body_lobe_btn = ttk.Button(body_tab, text="Add Lobe", command=lambda: add_lobe(body_tab, body_lobe_data))
+        add_body_lobe_btn.pack(pady=10)
+        add_gender_lobe_btn = ttk.Button(gender_tab, text="Add Lobe", command=lambda: add_lobe(gender_tab, gender_lobe_data))
+        add_gender_lobe_btn.pack(pady=10)
+        for i in range(len(body_lobes_default)):
+            add_lobe(body_tab, body_lobe_data, body_lobes_default[i], body_lobesset_default[i])
+        for i in range(len(gender_lobes_default)):
+            add_lobe(gender_tab, gender_lobe_data, gender_lobes_default[i], gender_lobesset_default[i])
+        ttk.Label(f, text="Model Configuration", font=("Segoe UI", 14, "bold")).pack(pady=(20, 10))
         vars = {
             "learning": tk.DoubleVar(value=0.05),
             "truely": tk.DoubleVar(value=1.0),
@@ -322,11 +380,13 @@ class App(tk.Tk):
             "pretrainmaxage": tk.IntVar(value=101),
             "pretrainepoch": tk.IntVar(value=40),
         }
+        param_frame = ttk.Frame(f)
+        param_frame.pack(fill="x", pady=10)
         def create_param_row(label_text, var_key, from_val, to_val, row_idx, is_int=False):
-            ttk.Label(f, text=label_text).grid(row=row_idx, column=0, sticky="w", pady=5)
-            scale = ttk.Scale(f, from_=from_val, to=to_val, orient="horizontal", variable=vars[var_key])
+            ttk.Label(param_frame, text=label_text).grid(row=row_idx, column=0, sticky="w", pady=5)
+            scale = ttk.Scale(param_frame, from_=from_val, to=to_val, orient="horizontal", variable=vars[var_key])
             scale.grid(row=row_idx, column=1, sticky="ew", padx=10)
-            val_lbl = ttk.Label(f, text="", width=6)
+            val_lbl = ttk.Label(param_frame, text="", width=6)
             val_lbl.grid(row=row_idx, column=2, sticky="w")
             def update_label(*args):
                 val = vars[var_key].get()
@@ -334,22 +394,45 @@ class App(tk.Tk):
             vars[var_key].trace_add("write", update_label)
             update_label()
         params = [
-            ("Learning Rate:", "learning", 0.001, 1, 1, False),
-            ("Truely Factor:", "truely", 0.1, 1.0, 2, False),
-            ("Momentum:", "momentumexc", 0.0, 1.0, 3, False),
-            ("Max Age:", "maxage", 50, 120, 4, True),
-            ("Max Height (cm):", "maxheight", 10, 250, 5, True),
-            ("Max Weight (kg):", "maxkg", 10, 300, 6, True),
-            ("Pre-train Epochs:", "pretrainepoch", 1, 500, 7, True),
-            ("Pre-train Data Age:", "pretrainmaxage", 10, 100, 8, True),
+            ("Learning Rate:", "learning", 0.001, 1, 0, False),
+            ("Truely Factor:", "truely", 0.1, 1.0, 1, False),
+            ("Momentum:", "momentumexc", 0.0, 1.0, 2, False),
+            ("Max Age:", "maxage", 50, 120, 3, True),
+            ("Max Height (cm):", "maxheight", 10, 250, 4, True),
+            ("Max Weight (kg):", "maxkg", 10, 300, 5, True),
+            ("Pre-train Epochs:", "pretrainepoch", 1, 500, 6, True),
+            ("Pre-train Data Age:", "pretrainmaxage", 10, 100, 7, True),
         ]
         for p in params:
             create_param_row(*p)
-        ttk.Label(f, text="Enable Pre-training:").grid(row=9, column=0, sticky="w", pady=10)
-        ttk.Checkbutton(f, variable=vars["pretrain"]).grid(row=9, column=1, sticky="w")
+        ttk.Label(param_frame, text="Enable Pre-training:").grid(row=8, column=0, sticky="w", pady=10)
+        ttk.Checkbutton(param_frame, variable=vars["pretrain"]).grid(row=8, column=1, sticky="w")
+        param_frame.columnconfigure(1, weight=1)
         def on_create():
             try:
+                lobes = []
+                lobesset = []
+                for train_e, learn_e, layer_es in body_lobe_data:
+                    rates = [float(train_e.get()), float(learn_e.get())]
+                    layers = [int(e.get()) for e in layer_es]
+                    if not layers:
+                        raise ValueError("Each lobe must have at least one layer")
+                    lobes.append(layers)
+                    lobesset.append(rates)
+                genderlobes = []
+                genderlobesset = []
+                for train_e, learn_e, layer_es in gender_lobe_data:
+                    rates = [float(train_e.get()), float(learn_e.get())]
+                    layers = [int(e.get()) for e in layer_es]
+                    if not layers:
+                        raise ValueError("Each lobe must have at least one layer")
+                    genderlobes.append(layers)
+                    genderlobesset.append(rates)
                 createnewmodel(
+                    lobes=lobes,
+                    lobesset=lobesset,
+                    genderlobes=genderlobes,
+                    genderlobesset=genderlobesset,
                     learning=vars["learning"].get(),
                     truely=vars["truely"].get(),
                     momentumexc=vars["momentumexc"].get(),
@@ -366,10 +449,9 @@ class App(tk.Tk):
             except Exception as e:
                 messagebox.showerror("Error", f"Failed to create model: {e}")
         btn_f = ttk.Frame(f)
-        btn_f.grid(row=10, column=0, columnspan=3, pady=30)
+        btn_f.pack(pady=30, fill="x")
         ttk.Button(btn_f, text="Cancel", command=win.destroy, width=15).pack(side="left", padx=5)
         ttk.Button(btn_f, text="Generate Model", command=on_create, width=20).pack(side="left", padx=5)
-        f.columnconfigure(1, weight=1)
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
