@@ -13,6 +13,7 @@ The core of this project is powered by the **ZevihaNut/3.0** neural network arch
 * **Powered by Zevihanthosa:** Leverages a custom-built `Brain` structure instead of traditional heavy frameworks, allowing for lightweight yet powerful regression.
 * **Hybrid Interface:**
 <img src="gui.png" width="600" height="400">
+
 * **GUI (Graphical User Interface):** Built with Tkinter for interactive sliding scales, real-time visualization, and gender toggles.
 * **CLI (Command Line Interface):** Robust terminal support for automated training, data entry, and quick predictions.
 
