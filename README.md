@@ -26,10 +26,10 @@ The core of this project is powered by the **ZevihaNut/3.0** neural network arch
 The system normalizes all inputs to a range between **0.0** and **1.0** before processing. The architecture uses a specialized "Multi-Brain" logic:
 
 * **The Gender Brain:** Classifies the input as Male (0.0) or Female (1.0).
-<img src="brain.png" width="800" height="400">
 
 * **The Biometric Brains:** Two separate `[[3, 12], [12, 6, 3]]` networks trained specifically on male and female growth curves.
 <img src="gui3.png" width="600" height="600">
+<img src="brain.png", width="600", height="800">
 
 * **Autoencoder Logic:** During training, the system trains on every permutation of input (Age only, Height+Weight, etc.) to allow the model to "fill in the blanks" regardless of which parameter is missing.
 <img src="autoencoder.png" width="500" height="400">
