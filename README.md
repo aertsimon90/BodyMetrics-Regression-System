@@ -12,9 +12,9 @@ The core of this project is powered by the **ZevihaNut/3.0** neural network arch
 * **Multi-directional Prediction:** The model doesn't just predict from age. It understands the correlation between all variables. If you provide only age, it predicts height and weight; if you provide height and weight, it can estimate age and gender.
 * **Powered by Zevihanthosa:** Leverages a custom-built `Brain` structure instead of traditional heavy frameworks, allowing for lightweight yet powerful regression.
 * **Hybrid Interface:**
+<img src="gui.png" width="600" height="400">
 * **GUI (Graphical User Interface):** Built with Tkinter for interactive sliding scales, real-time visualization, and gender toggles.
 * **CLI (Command Line Interface):** Robust terminal support for automated training, data entry, and quick predictions.
-<img src="gui.png" width="600" height="400">
 
 * **Visual Regression Analysis:** Integrated Matplotlib "Review" feature to visualize how well the AI line fits the training data points for both genders simultaneously.
 <img src="gui2.png" width="600" height="600">
