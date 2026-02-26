@@ -32,10 +32,10 @@ class System:
         self.data.append([age,height,kg,gender])
     def train(self, epoch=40):
         for i in range(epoch):
-            print(f"Training... {(i/epoch)*100:.0f}%")
             shuffleddata = self.data.copy()
             random.shuffle(shuffleddata)
-            for data in shuffleddata:
+            for datai, data in enumerate(shuffleddata):
+                print(f"Training... {(i/epoch)*100:.1f}% Epoch {(datai/len(shuffleddata))*100:.1f}% Dataset")
                 age, height, kg, gender = data
                 for useage in range(2):
                     for useheight in range(2):
