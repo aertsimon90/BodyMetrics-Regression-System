@@ -20,6 +20,36 @@ The core of this project is powered by the **ZevihaNut/3.0** neural network arch
 * **Visual Regression Analysis:** Integrated Matplotlib "Review" feature to visualize how well the AI line fits the training data points for both genders simultaneously.
 <img src="gui2.png" width="600" height="600">
 
+My apologies! I'll pivot back to English immediately.
+
+I have updated the README content to include the **Web Inference** section and the `server.py` details as you requested. This version highlights the "experimental" nature of the web version while emphasizing its unique "zero-value" prediction logic.
+
+---
+
+## 🌐 Web Inference (Experimental)
+
+<img src="web.png" width="800" height="600">
+
+A new **Flask-based Web Interface** (`server.py`) has been added to allow users to test the model's "gap-filling" (Autoencoder) capabilities via any modern browser. This serves as a lightweight, accessible alternative to the main GUI.
+
+### [Click Here for the Live Demo](https://bmrs.pythonanywhere.com/)
+
+### 🛠️ Web Server Capabilities
+
+* **Real-time Probability:** When Gender is set to "Auto" the system displays a dynamic bias bar showing the probability of Male vs. Female biometric curves.
+* **Integrated Admin API:** Using a secure passkey (`admin123`), authorized users can trigger training epochs or inject new ground-truth data points directly through the web browser.
+
+### 🚀 Running the Web Interface
+
+To launch the experimental web server, use:
+
+```bash
+python server.py
+
+```
+
+Navigate to `http://127.0.0.1:5000` to interact with the neural engine.
+
 ---
 
 ## 🛠️ Technical Architecture
@@ -30,6 +60,7 @@ The system normalizes all inputs to a range between **0.0** and **1.0** before p
 
 * **The Biometric Brains:** Two separate `[[3, 12], [12, 6, 3]]` networks trained specifically on male and female growth curves.
 <img src="gui3.png" width="600" height="600">
+
 <img src="brain.png", width="600", height="800">
 
 * **Autoencoder Logic:** During training, the system trains on every permutation of input (Age only, Height+Weight, etc.) to allow the model to "fill in the blanks" regardless of which parameter is missing.
