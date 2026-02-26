@@ -3,7 +3,7 @@
 import zevihanthosa
 import random
 import json
-import sys 
+import sys, time
 import tkinter as tk
 from tkinter import ttk, messagebox, simpledialog
 import matplotlib.pyplot as plt
@@ -31,11 +31,14 @@ class System:
         gender = max(min(gender,1),0)
         self.data.append([age,height,kg,gender])
     def train(self, epoch=40):
+        t = time.time()
+        tte = 0
         for i in range(epoch):
             shuffleddata = self.data.copy()
             random.shuffle(shuffleddata)
             for datai, data in enumerate(shuffleddata):
-                print(f"Training... {(i/epoch)*100:.1f}% Epoch {(datai/len(shuffleddata))*100:.1f}% Dataset")
+                tt = time.time()
+                print(f"Training... {(i/epoch)*100:.1f}% Epoch {(datai/len(shuffleddata))*100:.1f}% Dataset ",end="")
                 age, height, kg, gender = data
                 for useage in range(2):
                     for useheight in range(2):
@@ -53,6 +56,8 @@ class System:
                             else:
                                 self.malemodel.process([age2,height2,kg2], [age,height,kg])
                                 self.malemodel.process([age2,height2,kg2], [age,height,kg], naturalderiv=True)
+                tte = ((time.time()-tt)+tte)/2
+                print(f"Last:{abs(((((tte*len(shuffleddata))*epoch))-(time.time()-t))/60):.1f}m")
     def guess(self, age, height, kg, gender):
         age = min(age, self.maxage)/self.maxage
         height = min(height, self.maxheight)/self.maxheight
